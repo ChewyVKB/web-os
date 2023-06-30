@@ -94,7 +94,7 @@ body{
   align-items:center;
 }
 .desktopapp:hover{
-  background-image: linear-gradient(to bottom, rgba(58, 57, 57, 0.212), rgba(43, 42, 42, 0.322));
+  background-image: linear-gradient(to bottom, rgba(102, 102, 102, 0.212), rgba(83, 83, 83, 0.322));
   box-shadow:rgba(255, 255, 255, 0.219) 0px 0px 0px 1px;
   border-radius:25px;
 }

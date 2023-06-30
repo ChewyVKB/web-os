@@ -53,11 +53,14 @@ function App() {
 
 
   <div className="desktop">
-  <img className="desktopapp" width="125px" height="125px" src="https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/a819aac512e7261fee3310f1bbdaada7_aExwB3ULuk.png" />
+  <a href="link address" >
+  <img className="desktopapp"  width="125px" height="125px" src="https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/a819aac512e7261fee3310f1bbdaada7_aExwB3ULuk.png" /></a>
   <p className="apptext">User Info</p>
-  <img className="desktopapp" width="125px" height="125px" src="https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/a819aac512e7261fee3310f1bbdaada7_aExwB3ULuk.png" />
+  <a href="link address" >
+  <img className="desktopapp" width="125px" height="125px" src="https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/a819aac512e7261fee3310f1bbdaada7_aExwB3ULuk.png" /></a>
   <p className="apptext">Jobs</p>
-  <img className="desktopapp" width="125px" height="125px" src="https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/d24cb4baa88ce0807a3231f1e6050a9c_XC6SSUY12m.png" />
+  <a href="link address" >
+  <img className="desktopapp" width="125px" height="125px" src="https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/d24cb4baa88ce0807a3231f1e6050a9c_XC6SSUY12m.png" /></a>
   <p className="apptext" margin-left="125px">Projects</p>
   </div> 
 
