@@ -1,0 +1,244 @@
+.app {
+  transition: width, height, margin-top, cubic-bezier(0.25, 1, 0.5, 1) 100ms;
+  height: 100vh;
+}
+
+.app:hover {
+  width: 90px;
+  height: 90px;
+  margin-top: -30px;
+
+}
+
+/* Right side */
+.app:hover + .app {
+  width: calc(80px + var(--dock-offset-right, 0px));
+  height: calc(80px + var(--dock-offset-right, 0px));
+  margin-top: calc(-20px + var(--dock-offset-right, 0px) * -1);
+
+}
+
+.app:hover + .app + .app {
+  width: calc(70px + var(--dock-offset-right, 0px));
+  height: calc(70px + var(--dock-offset-right, 0px));
+  margin-top: calc(-10px + var(--dock-offset-right, 0px) * -1);
+}
+
+/* Left side */
+.app:has(+ .app:hover){
+  width: calc(80px + var(--dock-offset-left, 0px));
+  height: calc(80px + var(--dock-offset-left, 0px));
+  margin-top: calc(-20px + var(--dock-offset-left, 0px) * -1);
+}
+
+.app:has(+ .app + .app:hover){
+  width: calc(70px + var(--dock-offset-left, 0px));
+  height: calc(70px + var(--dock-offset-left, 0px));
+  margin-top: calc(-10px + var(--dock-offset-left, 0px) * -1);
+}
+
+/**
+ Styling that has nothing to do with the animation:
+*/
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  background-image: url("../src/assets/debian.webp");
+  background-repeat: no-repeat;
+  background-size: cover;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+body{
+  margin: 0;
+
+}
+
+.page {
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+
+}
+.desktop{
+  position:relative;
+  display: flex;
+  flex-direction:column;
+  row-gap:20px;
+  padding-top: 40px;
+  padding-left: 40px;
+  width:90px;
+}
+.apptext{
+  margin-top:-50px;
+  margin-left: 20px;
+  text-align: center;
+}
+.desktopapp{
+  max-width:80px;
+  max-height:80px;
+  padding:15px;
+  padding-bottom: 30px;
+  align-items:center;
+}
+.desktopapp:hover{
+  background-image: linear-gradient(to bottom, rgba(58, 57, 57, 0.212), rgba(43, 42, 42, 0.322));
+  box-shadow:rgba(255, 255, 255, 0.219) 0px 0px 0px 1px;
+  border-radius:25px;
+}
+
+.desktopapps{
+  height:25px;
+  width:25px;
+}
+.dock {
+  position: fixed;
+  margin: auto auto 30px auto;
+  border-radius: 25px;
+  padding: 0 12px;
+  background-image: linear-gradient(to bottom, rgba(58, 57, 57, 0.212), rgba(43, 42, 42, 0.322));
+  box-shadow:rgba(255, 255, 255, 0.219) 0px 0px 0px 1px inset;
+  bottom:0;
+
+}
+
+.dock ul {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+
+}
+
+.app {
+  width: 60px;
+  height: 60px;
+  position: relative;
+  padding: 0 3px;
+
+  /* The only reason this padding is disabled, is because the icons have
+  a padding in the image that would take too much effort to remove :)
+  In case you add custom icons or anything without the padding in the image, you need
+  to add this padding on each app element. If you'd add it as a margin between the elements,
+  you would lose the over state when moving between icons. */
+  /* padding: 0 6px; */
+}
+
+.app img {
+  width: 100%;
+  height: 100%;
+
+}
+
+.app a {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 12px;
+  color: #fff;
+
+}
+
+.app:hover .tooltip,
+.app:focus-within .tooltip {
+  opacity: 1;
+
+}
+
+.tooltip {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: ease-in opacity 100ms;
+  display: block;
+  background: rgba(0,0,0,0.58);
+  padding: 8px;
+  border-radius: 12px;
+  height: 22px;
+  width: auto;
+  box-shadow:rgba(0, 0, 0, 0.17) 0px 12px 8px 1px;
+  white-space: nowrap;
+
+}
+
+.source-links {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  right: 20px;
+  top: 20px;
+  text-align: right;
+
+}
+
+.source-links a {
+  color: #fff;
+  opacity: 0.3;
+  margin-bottom: 8px;
+
+}
+
+.source-links a:hover {
+  opacity: 1;
+
+}
+
+.topnav{
+  background-color: #333333bb;
+  max-width: 100vw;
+  box-shadow:0 0 0 2px rgba(51, 51, 51, 0.815);
+  filter: blur(1);
+  height: 25px;
+  
+}
+
+.topBarImg{
+  max-width:25px;
+  max-height:20px;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+.topDate{
+  margin-left: 47%; 
+  margin-top: -20px;
+  position:fixed;
+  
+  }
+
+.profile{
+  background-color:#333333bb;
+  margin-right: 88vw;
+  margin-top: 2.5px;
+  height: 25vh;
+  border-radius: 0 0 15px 15px;
+
+}
+
+.profileImg{
+margin-top: 20px;
+margin-left: 100px;
+max-width: 100px;
+max-height: 100px;
+padding: -5;
+}
+.profileLocation{
+margin-top: -2vh;
+margin-left: 1.7vw;
+}
+.profileInfo{
+  margin-left: 2.8vw;
+}
