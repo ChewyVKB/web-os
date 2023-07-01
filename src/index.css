@@ -213,12 +213,21 @@ body{
   margin-left: 5px;
 }
 .topDate{
-  margin-left: 47%; 
-  margin-top: -20px;
+  margin-top:2px;
+  margin-left: 46.8%;
+  display:flex;
+  justify-content: center;
   position:fixed;
+  align-items: center;
+  width:120px;
+  height: 20px;
+  padding-bottom:3px;
   
   }
-
+.topDate:hover{
+  background-image: linear-gradient(to bottom, rgba(165, 165, 165, 0.212), rgba(139, 139, 139, 0.322));
+  border-radius:50px;
+}
 .profile{
   background-color:#333333bb;
   margin-right: 88vw;

@@ -2,7 +2,7 @@ import "./index.css";
 import { useRef } from "react";
 import { scaleValue } from "./utils/scales";
 import {useState, useEffect} from 'react';
-import UserInfo from "./components/userinfo";
+
 
 const maxAdditionalSize = 5;
 
@@ -45,7 +45,7 @@ function App() {
 
   <div className="topnav">
     <div className="topDate">
-    <h5>{' '}{dateState.toLocaleDateString('en-GB', {month: 'short', day: 'numeric', year: 'numeric',})} 
+    <h5>{' '}{dateState.toLocaleDateString('en-US', {month: 'short', day: 'numeric',})} 
     <> </>{dateState.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true,})}
     </h5></div>
   </div> 
@@ -70,19 +70,19 @@ function App() {
       <nav ref={dockRef} className="dock">
         <ul>
           <li className="app" onMouseMove={handleAppHover}>
-            <a href="https://www.frontend.fyi" target="_blank">
+            <a href="https://www.facebook.com/" target="_blank">
               <img src="https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/b15615003b04ef31eaf42c678aa70e9c_hysKBBYO26.png" />
               <span className="tooltip">Facebook</span>
             </a>
           </li>
           <li className="app" onMouseMove={handleAppHover}>
-            <a href="https://www.frontend.fyi" target="_blank">
+            <a href="https://www.instagram.com/chewyvkb" target="_blank">
               <img src="https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/5866a477a620cad420515c3576227af1_90nJbRt5xN.png" />
               <span className="tooltip">Instagram</span>
             </a>
           </li>
           <li className="app" onMouseMove={handleAppHover}>
-            <a href="https://www.frontend.fyi" target="_blank">
+            <a href="https://www.twitter.com/flawlesschewyy" target="_blank">
               <img src="https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/a4cdd1aa629e384145eef0f402b69cc1_SLNRpzh1Jj.png" />
               <span className="tooltip">Twitter</span>
             </a>
