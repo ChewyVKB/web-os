@@ -1,17 +1,36 @@
 import "./index.css";
+import 'react-calendar/dist/Calendar.css';
 import { useRef } from "react";
 import { scaleValue } from "./utils/scales";
-import {useState, useEffect} from 'react';
+import {useState, useEffect,} from 'react';
+import MyCalendar from "./components/calendar";
+import UserInfo from "./components/userinfo";
 
 
 const maxAdditionalSize = 5;
-
 function App() {
-  const [state, setState] = useState('start')
+  const [show, setShow] = useState(false);
+  const showCalendar = () => {
+    if (show == false) {
+      setShow(true);
+          } else {
+            setShow(false);
+                    }}
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside, true)}, []);
+  const refOne = useRef(document.createElement("div"));
+  const handleClickOutside = (e: any) => {
+    if (refOne.current.contains(e.target)){
+      setVisible(true)}
+      else {
+        setVisible(false);
+      }
+    }
   const [dateState, setDateState] = useState(new Date());
     useEffect(() => {
            setInterval(() => setDateState(new Date()), 3000);
-    }, []);
+          }, []);
   const dockRef = useRef<HTMLDivElement>(null);
 
   const handleAppHover = (ev: React.MouseEvent<HTMLLIElement>) => {
@@ -41,31 +60,25 @@ function App() {
   return (
 <body>
 
-
-
   <div className="topnav">
-    <div className="topDate">
-    <h5>{' '}{dateState.toLocaleDateString('en-US', {month: 'short', day: 'numeric',})} 
-    <> </>{dateState.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true,})}
-    </h5></div>
+  <button className="navButton" style={{ fontWeight: 'bold' }} onClick={() => setVisible(!visible)}>{visible ?'System Info' : 'System Info'}</button>
+    <div className="topDate" >
+    <h5 >{' '}{dateState.toLocaleDateString('en-US', {month: 'short', day: 'numeric',})} 
+    <> </>{dateState.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true,})}</h5>
+    <div className="calendarButton" onClick={showCalendar}></div>
+    {show && <MyCalendar/>}
+    </div>    
   </div> 
-
-
-
+  {visible &&
+    <UserInfo/>}
   <div className="desktop">
-  <a href="link address" >
-  <img className="desktopapp"  width="125px" height="125px" src="https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/a819aac512e7261fee3310f1bbdaada7_aExwB3ULuk.png" /></a>
-  <p className="apptext">User Info</p>
-  <a href="link address" >
-  <img className="desktopapp" width="125px" height="125px" src="https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/a819aac512e7261fee3310f1bbdaada7_aExwB3ULuk.png" /></a>
-  <p className="apptext">Jobs</p>
-  <a href="link address" >
-  <img className="desktopapp" width="125px" height="125px" src="https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/d24cb4baa88ce0807a3231f1e6050a9c_XC6SSUY12m.png" /></a>
-  <p className="apptext" margin-left="125px">Projects</p>
+  <img className="desktopapp"  width="125px" height="125px" src="https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/a819aac512e7261fee3310f1bbdaada7_aExwB3ULuk.png"></img>
+  <span className="apptext">About Me</span>
+  <img className="desktopapp" width="125px" height="125px" src="https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/a819aac512e7261fee3310f1bbdaada7_aExwB3ULuk.png" />
+  <p className="apptext">Previous Work</p>
+  <img className="desktopapp" width="125px" height="125px" src="https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/d24cb4baa88ce0807a3231f1e6050a9c_XC6SSUY12m.png" />
+  <p className="apptext" margin-left="125px">My Projects</p>
   </div> 
-
-
-
     <div className="page">
       <nav ref={dockRef} className="dock">
         <ul>
