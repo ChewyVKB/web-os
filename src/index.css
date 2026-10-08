@@ -1,320 +1,866 @@
-.app {
-  transition: width, height, margin-top, cubic-bezier(0.25, 1, 0.5, 1) 100ms;
-  height: 100vh;
-}
-
-.app:hover {
-  width: 90px;
-  height: 90px;
-  margin-top: -30px;
-
-}
-
-/* Right side */
-.app:hover + .app {
-  width: calc(80px + var(--dock-offset-right, 0px));
-  height: calc(80px + var(--dock-offset-right, 0px));
-  margin-top: calc(-20px + var(--dock-offset-right, 0px) * -1);
-
-}
-
-.app:hover + .app + .app {
-  width: calc(70px + var(--dock-offset-right, 0px));
-  height: calc(70px + var(--dock-offset-right, 0px));
-  margin-top: calc(-10px + var(--dock-offset-right, 0px) * -1);
-}
-
-/* Left side */
-.app:has(+ .app:hover){
-  width: calc(80px + var(--dock-offset-left, 0px));
-  height: calc(80px + var(--dock-offset-left, 0px));
-  margin-top: calc(-20px + var(--dock-offset-left, 0px) * -1);
-}
-
-.app:has(+ .app + .app:hover){
-  width: calc(70px + var(--dock-offset-left, 0px));
-  height: calc(70px + var(--dock-offset-left, 0px));
-  margin-top: calc(-10px + var(--dock-offset-left, 0px) * -1);
-}
-
-/**
- Styling that has nothing to do with the animation:
-*/
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --topbar-h: 28px;
+  --glass-bg: rgba(28, 29, 34, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --text: rgba(255, 255, 255, 0.92);
+  --muted: rgba(255, 255, 255, 0.6);
+  --accent: #4f8cff;
+  --radius: 14px;
+  --dock-item: 52px;
+
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  color: var(--text);
+  color-scheme: dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-  background-image: url("../src/assets/debian.webp");
-  background-repeat: no-repeat;
-  background-size: cover;
-  max-height: 100vh;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #1b2433 url('./assets/debian.webp') center / cover no-repeat fixed;
   overflow: hidden;
 }
 
-body{
+a {
+  color: #8db4ff;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 12px;
+}
+
+.avatar {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.avatar-lg {
+  width: 104px;
+  height: 104px;
+}
+
+.pill-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.pill-button:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.app-icon {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 23%;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.app-icon svg {
+  width: 52%;
+  height: 52%;
+}
+
+/* ---------- Menu bar ---------- */
+
+.topbar {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 10000;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: var(--topbar-h);
+  padding: 0 8px;
+  border-width: 0 0 1px;
+  box-shadow: none;
+  font-size: 13px;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.topbar-right {
+  justify-self: end;
+  display: flex;
+  gap: 14px;
+  padding-right: 8px;
+  opacity: 0.85;
+}
+
+.topbar-app-title {
+  padding: 0 8px;
+  font-weight: 600;
+}
+
+.topbar-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 22px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.topbar-button.strong {
+  font-weight: 700;
+}
+
+.topbar-button:hover,
+.topbar-button.is-active {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.menu {
+  position: relative;
+}
+
+.popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  padding: 16px;
+  border-radius: var(--radius);
+  background: rgba(30, 31, 36, 0.96);
+  animation: pop 140ms ease-out;
+}
+
+.topbar-center > .popover {
+  left: 50%;
+  translate: -50% 0;
+}
+
+.system-info {
+  width: 300px;
+}
+
+.system-info-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.system-info-header h2 {
   margin: 0;
-
+  font-size: 16px;
 }
 
-.page {
-  min-height: 100dvh;
+.system-info-header p {
+  margin: 0;
+}
+
+.system-info-specs {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 14px;
+  margin: 16px 0;
+  padding: 12px 0;
+  border-block: 1px solid var(--glass-border);
+  font-size: 13px;
+}
+
+.system-info-specs dt {
+  color: var(--muted);
+}
+
+.system-info-specs dd {
+  margin: 0;
+}
+
+.system-info-actions {
   display: flex;
-  justify-content: center;
+  gap: 8px;
+}
 
+/* ---------- Calendar ---------- */
+
+.calendar-popover {
+  width: 300px;
 }
-.desktop{
-  position:relative;
+
+.calendar-popover-header {
   display: flex;
-  flex-direction:column;
-  row-gap:20px;
-  padding-top: 40px;
-  padding-left: 40px;
-  width:90px;
-  
+  flex-direction: column;
+  margin-bottom: 8px;
 }
-.apptext{
-  margin-top:-80px;
-  margin-left: 20px;
+
+.calendar-popover-date {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.calendar-popover .react-calendar {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+}
+
+.calendar-popover .react-calendar button {
+  color: var(--text);
+  border-radius: 8px;
+}
+
+.calendar-popover .react-calendar__navigation {
+  margin-bottom: 4px;
+}
+
+.calendar-popover .react-calendar__navigation button:enabled:hover,
+.calendar-popover .react-calendar__navigation button:enabled:focus,
+.calendar-popover .react-calendar__tile:enabled:hover,
+.calendar-popover .react-calendar__tile:enabled:focus {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.calendar-popover .react-calendar__month-view__weekdays {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.calendar-popover .react-calendar__month-view__weekdays abbr {
+  text-decoration: none;
+}
+
+.calendar-popover .react-calendar__tile {
+  padding: 8px 0;
+}
+
+.calendar-popover .react-calendar__month-view__days__day--neighboringMonth {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.calendar-popover .react-calendar__tile--active,
+.calendar-popover .react-calendar__tile--active:enabled:hover,
+.calendar-popover .react-calendar__tile--active:enabled:focus {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.calendar-popover .react-calendar__tile--now,
+.calendar-popover .react-calendar__tile--now:enabled:hover,
+.calendar-popover .react-calendar__tile--now:enabled:focus {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ---------- Desktop ---------- */
+
+.desktop-icons {
+  position: fixed;
+  top: calc(var(--topbar-h) + 20px);
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.desktop-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100px;
+  padding: 10px 4px 8px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  font-size: 13px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+}
+
+.desktop-icon:hover,
+.desktop-icon:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.desktop-icon-image {
+  width: 60px;
+  height: 60px;
+}
+
+/* ---------- Windows ---------- */
+
+.window {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  max-width: calc(100vw - 24px);
+  max-height: calc(100vh - var(--topbar-h) - 24px);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  animation: window-open 160ms ease-out;
+}
+
+.window.is-focused {
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.window.is-maximized {
+  inset: calc(var(--topbar-h) + 8px) 8px 104px;
+  max-width: none;
+  max-height: none;
+}
+
+.window-titlebar {
+  display: grid;
+  grid-template-columns: 52px 1fr 52px;
+  align-items: center;
+  flex-shrink: 0;
+  height: 38px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.04);
+  user-select: none;
+  touch-action: none;
+}
+
+.window-title {
   text-align: center;
-  z-index:-1;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
 }
-.desktopapp{
-  max-width:80px;
-  max-height:80px;
-  padding:15px;
-  padding-bottom: 60px;
-  align-items:center;
-}
-.desktopapp:hover{
-  background-image: linear-gradient(to bottom, rgba(141, 141, 141, 0.185), rgba(148, 148, 148, 0.11));
-  box-shadow:rgba(255, 255, 255, 0.219) 0px 0px 0px 1px;
-  border-radius:25px;
-}
-/*
-Button Styles for Desktop App
-.appButton{
-  position:absolute;
-  border:0;
-  border-radius:25px;
-  background-color:#00000000;
-  width:110px;
-  height: 155px;
-  cursor:pointer;
-  grid-row:auto !important;
-}
-.appButton:hover{
-  background-image: linear-gradient(to bottom, rgba(141, 141, 141, 0.185), rgba(148, 148, 148, 0.11));
-  box-shadow:rgba(255, 255, 255, 0.219) 0px 0px 0px 1px;
-}*/
 
-.desktopapps{
-  height:25px;
-  width:25px;
+.window.is-focused .window-title {
+  color: var(--text);
 }
+
+.window-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.window-control {
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+}
+
+.window.is-focused .close,
+.window-controls:hover .close {
+  background: #ff5f57;
+}
+
+.window.is-focused .minimize,
+.window-controls:hover .minimize {
+  background: #febc2e;
+}
+
+.window.is-focused .maximize,
+.window-controls:hover .maximize {
+  background: #28c840;
+}
+
+.window-control:hover {
+  filter: brightness(1.15);
+}
+
+.window-body {
+  flex: 1;
+  overflow: auto;
+  padding: 24px 28px;
+  background: rgba(18, 18, 22, 0.82);
+}
+
+/* ---------- App content ---------- */
+
+.app-content h1 {
+  margin: 0 0 4px;
+  font-size: 24px;
+}
+
+.app-content h2 {
+  margin: 24px 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.app-content h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.app-content p {
+  margin: 0 0 12px;
+  line-height: 1.6;
+}
+
+.app-content .lead {
+  margin: 0 0 4px;
+  font-size: 15px;
+  color: var(--text);
+  opacity: 0.85;
+}
+
+.about-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.about-header p {
+  margin: 0;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tags li {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 13px;
+}
+
+.link-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link-list a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.link-list a:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.timeline {
+  margin: 20px 0 0 6px;
+  padding: 0 0 0 22px;
+  border-left: 2px solid rgba(255, 255, 255, 0.15);
+  list-style: none;
+}
+
+.timeline > li {
+  position: relative;
+  margin-bottom: 28px;
+}
+
+.timeline > li::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: -29px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(79, 140, 255, 0.25);
+}
+
+.timeline > li > p.small {
+  margin: 0;
+}
+
+.repo-list {
+  display: grid;
+  gap: 12px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.repo-card {
+  padding: 14px 16px;
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.repo-card p {
+  margin: 4px 0 8px;
+}
+
+.repo-name {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.repo-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+  color: var(--muted);
+}
+
+.repo-meta span,
+.repo-meta a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ---------- Dock ---------- */
+
 .dock {
   position: fixed;
-  margin: auto auto 30px auto;
-  border-radius: 25px;
-  padding: 0 12px;
-  background-image: linear-gradient(to bottom, rgba(58, 57, 57, 0.212), rgba(43, 42, 42, 0.322));
-  box-shadow:rgba(255, 255, 255, 0.219) 0px 0px 0px 1px inset;
-  bottom:0;
-
+  bottom: 12px;
+  left: 50%;
+  translate: -50% 0;
+  z-index: 9000;
+  padding: 0 8px;
+  border-radius: 22px;
 }
 
 .dock ul {
   display: flex;
-  list-style-type: none;
-  padding: 0;
-
+  align-items: flex-end;
+  height: calc(var(--dock-item) + 16px);
+  margin: 0;
+  padding: 8px 0;
+  list-style: none;
 }
 
-.app {
-  width: 60px;
-  height: 60px;
+.dock-item {
   position: relative;
-  padding: 0 3px;
-
-  /* The only reason this padding is disabled, is because the icons have
-  a padding in the image that would take too much effort to remove :)
-  In case you add custom icons or anything without the padding in the image, you need
-  to add this padding on each app element. If you'd add it as a margin between the elements,
-  you would lose the over state when moving between icons. */
-  /* padding: 0 6px; */
+  box-sizing: content-box;
+  width: var(--dock-item);
+  height: var(--dock-item);
+  /* Padding (not margin) so hover isn't lost when moving between icons. */
+  padding: 0 4px;
+  transition: width 150ms cubic-bezier(0.25, 1, 0.5, 1), height 150ms cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.app img {
-  width: 100%;
-  height: 100%;
-
-}
-
-.app a {
-  width: 100%;
-  height: 100%;
+.dock-item > a,
+.dock-item > button {
+  position: relative;
   display: block;
-  border-radius: 12px;
-  color: #fff;
-
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 23%;
+  background: none;
+  cursor: pointer;
 }
 
-.app:hover .tooltip,
-.app:focus-within .tooltip {
-  opacity: 1;
+.dock-item:hover {
+  width: 76px;
+  height: 76px;
+}
 
+.dock-item:hover + .dock-item,
+.dock-item:has(+ .dock-item:hover) {
+  width: calc(64px + var(--offset, 0px));
+  height: calc(64px + var(--offset, 0px));
+}
+
+.dock-item:hover + .dock-item + .dock-item,
+.dock-item:has(+ .dock-item + .dock-item:hover) {
+  width: calc(58px + var(--offset, 0px));
+  height: calc(58px + var(--offset, 0px));
+}
+
+.dock-item:hover + .dock-item,
+.dock-item:hover + .dock-item + .dock-item {
+  --offset: var(--dock-offset-right);
+}
+
+.dock-item:has(+ .dock-item:hover),
+.dock-item:has(+ .dock-item + .dock-item:hover) {
+  --offset: var(--dock-offset-left);
+}
+
+.dock-divider {
+  align-self: stretch;
+  width: 1px;
+  margin: 4px 8px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.dock-indicator {
+  position: absolute;
+  bottom: -7px;
+  left: 50%;
+  translate: -50% 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .tooltip {
   position: absolute;
-  top: -40px;
+  bottom: calc(100% + 12px);
   left: 50%;
-  transform: translateX(-50%);
-  opacity: 0;
-  transition: ease-in opacity 100ms;
-  display: block;
-  background: rgba(0,0,0,0.58);
-  padding: 8px;
-  border-radius: 12px;
-  height: 22px;
-  width: auto;
-  box-shadow:rgba(0, 0, 0, 0.17) 0px 12px 8px 1px;
+  translate: -50% 0;
+  padding: 4px 10px;
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  background: rgba(20, 20, 24, 0.85);
+  color: var(--text);
+  font-size: 12px;
   white-space: nowrap;
-
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 100ms ease-in;
 }
 
-.source-links {
-  position: absolute;
+.dock-item:hover .tooltip,
+.dock-item:focus-within .tooltip {
+  opacity: 1;
+}
+
+/* ---------- Mobile ---------- */
+
+.mobile {
+  position: fixed;
+  inset: 0;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  right: 20px;
-  top: 20px;
-  text-align: right;
-
 }
 
-.source-links a {
-  color: #fff;
-  opacity: 0.3;
-  margin-bottom: 8px;
-
+.mobile-statusbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 24px 6px;
+  font-size: 15px;
+  font-weight: 600;
 }
 
-.source-links a:hover {
-  opacity: 1;
-
-}
-
-.topnav{
-  background-color: #1d1e20;
-  max-width: 100vw;  box-shadow:0 0 0 2px rgba(20, 20, 20, 0.685);
-  filter: blur(1);
-  height: 25px;
-  
-}
-.navButton{
-  position:absolute;
-  border:0;
-  border-radius:50px;
-  margin-left:5px;
-  background-color:#1d1e20;
-  width:100px;
-  height: 25px;
-  cursor:pointer;
-}
-
-
-.topBarImg{
-  max-width:25px;
-  max-height:20px;
-  margin-top: 5px;
-  margin-left: 5px;
-}
-.navButton:hover{
-  background-image: linear-gradient(to bottom, rgba(165, 165, 165, 0.212), rgba(139, 139, 139, 0.322));
-}
-.topDate{
-  margin-left: 46.8%;
-  display:flex;
-  justify-content: center;
-  position:fixed;
+.mobile-status-icons {
+  display: flex;
+  gap: 8px;
   align-items: center;
-  width:120px;
-  height: 22px;
-  padding-bottom:3px;
-  z-index:1;
-  
+}
+
+.mobile-home {
+  flex: 1;
+  overflow: auto;
+  padding: 16px 20px;
+}
+
+.mobile-widget {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding: 16px;
+  border-radius: 24px;
+}
+
+.mobile-widget h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.mobile-widget p {
+  margin: 0;
+}
+
+.mobile-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mobile-app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mobile-icon {
+  width: 60px;
+  height: 60px;
+}
+
+.mobile-label {
+  font-size: 12px;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.mobile-dock {
+  margin: 0 12px 12px;
+  padding: 12px 8px 8px;
+  border-radius: 30px;
+}
+
+.mobile-dock ul {
+  display: flex;
+  justify-content: space-around;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mobile-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  background: rgba(18, 18, 22, 0.92);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  animation: slide-up 220ms ease-out;
+}
+
+.mobile-sheet-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.mobile-sheet-header h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.mobile-back {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.mobile-sheet-body {
+  flex: 1;
+  overflow: auto;
+  padding: 20px;
+}
+
+/* ---------- Motion ---------- */
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
   }
-.topDate:hover{
-  background-image: linear-gradient(to bottom, rgba(165, 165, 165, 0.212), rgba(139, 139, 139, 0.322));
-  border-radius:50px;
-}
-.profile{
-  position:absolute;
-  background-image:linear-gradient(to bottom, rgba(29, 30, 32, 0.966), rgba(29, 30, 32, 0.959));
-  max-width: 100vw;
-  box-shadow:0 0 0 2px rgba(20, 20, 20, 0.685);
-  margin-right: 88vw;
-  margin-top: 2.5px;
-  height: 25vh;
-  width: 12vw;
-  border-radius: 0 0 15px 15px;
-  z-index:2;
-
 }
 
-.profileImg{
-margin-top: 60px;
-margin-left: 130px;
-max-width: 100px;
-max-height: 100px;
-padding: -5;
-}
-.profileLocation{
-margin-top: -2vh;
-margin-left: 1.7vw;
-}
-.profileInfo{
-  margin-left: 2.8vw;
-  z-index:1;
+@keyframes window-open {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
 }
 
-.textwindow{
-  position:absolute;
-  margin-left: 50vh;
-  width:200px;
-  height:500px;
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
 }
 
-.calendar{
-  position:absolute;
-  background-image:linear-gradient(to bottom, rgba(29, 30, 32, 0.966), rgba(29, 30, 32, 0.959));
-  max-width: 100vw;  box-shadow:0 0 0 2px rgba(20, 20, 20, 0.685);
-  margin-right: vw;
-  margin-top: 225px;
-  height: 15vh;
-  width: 12vw;
-  border-radius: 0 0 15px 15px;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
-.calendarButton{
-  cursor:pointer;
-  display:flex;
-  justify-content: left;
-  position:fixed;
-  align-items: center;
-  width:120px;
-  height: 22px;
-  padding-bottom:3px;
-  z-index:2
-}
-
